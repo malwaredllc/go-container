@@ -41,10 +41,13 @@ func run() {
 
 func child() {
 	// set up new rootfs
-	must(syscall.Chroot("/home/newrootfs"))
+	must(syscall.Chroot("/var/rootfs")) // standard linux fs needs to have been created already
 	must(os.Chdir("/"))
+
+	// set up separate dir for procs
 	must(syscall.Mount("proc", "proc", "proc", 0, "proc"))
 
+	// run command
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
