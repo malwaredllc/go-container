@@ -8,7 +8,7 @@ import (
 )
 
 // docker		  run <image> <cmd> <params>
-// go run main.go run         <cmd> <params>
+// go run container.go /bin/bash
 
 func main() {
 	switch os.Args[1] {
@@ -40,6 +40,11 @@ func run() {
 }
 
 func child() {
+	// set up new rootfs
+	must(syscall.Chroot("/home/newrootfs"))
+	must(os.Chdir("/"))
+	must(syscall.Mount("proc", "proc", "proc", 0, "proc"))
+
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
