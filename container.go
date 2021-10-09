@@ -44,8 +44,8 @@ func child() {
 	must(syscall.Chroot("/var/rootfs")) // standard linux fs needs to have been created already
 	must(os.Chdir("/"))
 
-	// set up separate dir for procs
-	must(syscall.Mount("proc", "proc", "proc", 0, "proc"))
+	// set up separate dir for procs at the target proc with the type of proc and a data value of proc.
+	must(syscall.Mount("proc", "proc", "proc", 0, "proc")) // mount proc to proc with type proc and data proc
 
 	// run command
 	cmd := exec.Command(os.Args[2], os.Args[3:]...)
